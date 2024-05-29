@@ -3,7 +3,7 @@ import * as THREE from 'three'
 class CameraModule{
     constructor(){
         const defaultCamera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1500)
-        defaultCamera.position.set(-100,50,0)
+        defaultCamera.position.set(2.8,100,100)
        
         this.cameras={
             default:defaultCamera

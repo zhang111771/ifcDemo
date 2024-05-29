@@ -3,7 +3,12 @@
     <SceneLeftAside/>
     <SceneRightAside/>
     <DeviceBox/>
-    <button type="button" class="reset-btn" @click="resetFloor">复位大厦</button>
+    <div class="handle-btns">
+
+        <button type="button" class="reset-btn" @click="resetFloor">复位大厦</button>
+        <button type="button" class="offset-floor" @click="offsetFloor">分离大厦</button>
+    </div>
+    
 </template>
 <script setup>
 import init from '../three/init'
@@ -22,6 +27,9 @@ onMounted(()=>{
 const resetFloor=()=>{
     eventHub.emit("resetFloor")
 }
+const offsetFloor=()=>{
+    eventHub.emit("offsetFloor")
+}
 
 </script>
 <style lang="scss" scoped>
@@ -32,15 +40,19 @@ const resetFloor=()=>{
     width:100vw;
     height: 100vh;
 }
-.reset-btn{
+.handle-btns{
     position: fixed;
     z-index: 10;
     right:450px;
     top:20px;
+}
+.reset-btn,.offset-floor{
+    display: block;
     background-color: #38f;
     padding:5px;
     border-radius: 2px;
     color:#fff;
     border:none;
+    margin-bottom:20px;
 }
 </style>
