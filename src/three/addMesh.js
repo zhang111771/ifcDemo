@@ -11,6 +11,7 @@ import animate from "./animate";
 import eventHub from "@/utils/eventHub";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import Composer from './composerModule'
+import {gsap} from "gsap"
 class AddMesh {
   constructor(animate) {
     this.animate=animate
@@ -30,6 +31,21 @@ class AddMesh {
     this.addCity();
     this.addSceneBackground();
     this.addLight();
+    eventHub.on("resetFloor",()=>{
+      eventHub.emit("clearTags")
+      this.outlineMeshes.map((mesh)=>{
+        mesh.visible=true
+      })
+      gsap.to(this.camera.position,{
+        duration:1.5,
+        x:-100,
+        y:50,
+        z:0,
+       }
+)
+
+    
+    })
   }
   addHelper() {
     this.hlper = new THREE.AxesHelper(50);
@@ -37,7 +53,7 @@ class AddMesh {
   }
   addCity() {
     this.actions = [];
-    this.gltfLoader.load("./model/floor1.glb", (gltf) => {
+    this.gltfLoader.load("./model/floor2.glb", (gltf) => {
       this.outlineMeshes=gltf.scene.children
       gltf.scene.children.map((child) => {
         //组需要做特殊处理
@@ -117,7 +133,7 @@ class AddMesh {
         if (getIntersectObjects.length > 0) {
           let object = getIntersectObjects[0].object;
           this.clickTarget = object;
-          console.log(object);
+        
           this.composerModule.clickOutlineEffect.selection.set([object]);
 
           eventHub.emit("selectMesh", {
@@ -130,6 +146,27 @@ class AddMesh {
         }
       }
     });
+    
+      window.addEventListener("dblclick",(event)=>{
+        eventHub.emit("clearTags")
+        if(this.clickTarget){
+        this.outlineMeshes.map((item)=>{
+          if(item.name!=this.clickTarget.name){
+            item.visible=false
+          }
+        })
+        ControlsModule.controls.target=this.clickTarget.position
+        gsap.to( this.camera.position, {
+          x: this.clickTarget.position.x,
+          y: this.clickTarget.position.y+5,
+          z: this.clickTarget.position.z-5,
+          duration: 1.5
+      })
+    }
+     
+      })
+    
+    
   }
   addSceneBackground() {
     this.rgbeLoader = new RGBELoader();
