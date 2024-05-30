@@ -225,10 +225,10 @@ class AddMesh {
   }
   addCity() {
     this.actions = [];
-    this.gltfLoader.load("./model/floor2.glb", (gltf) => {
+    this.gltfLoader.load("./model/floor3.glb", (gltf) => {
 
       gltf.scene.children.map((child) => {
-      
+        
         //组需要做特殊处理
         if (child.isGroup) {
           child.visible = false;
@@ -257,11 +257,15 @@ class AddMesh {
           // singleMergeMesh.name = child.name + 'merge'
           singleMergeMesh.name = child.name;
           singleMergeMesh.oriPosition=new THREE.Vector3(child.position.x,child.position.y,child.position.z)
+          singleMergeMesh.castShadow = true
+          singleMergeMesh.receiveShadow = true
           this.scene.add(singleMergeMesh);
           //外轮廓集合
           this.outlineMeshes.push(singleMergeMesh);
         } else {
           child.oriPosition=new THREE.Vector3(child.position.x,child.position.y,child.position.z)
+          // child.castShadow = true
+          // child.receiveShadow = true
           //外轮廓集合
           this.outlineMeshes.push(child);
         }
@@ -356,20 +360,20 @@ class AddMesh {
   addLight() {
     this.directionalLight = new THREE.DirectionalLight(
       (0xfffffff).toExponential,
-      0.5
+     1
     );
-    this.directionalLight.position.set(100, 20, 50);
-    this.directionalLight.castShadow = true;
-    // this.directionalLight.shadow.camera.near = 0.01;
-    // this.directionalLight.shadow.camera.far = 500;
-    // this.directionalLight.shadow.camera.right = 30;
-    // this.directionalLight.shadow.camera.left = - 30;
-    // this.directionalLight.shadow.camera.top	= 30;
-    // this.directionalLight.shadow.camera.bottom = - 30;
-    // this.directionalLight.shadow.mapSize.width = 1024;
-    // this.directionalLight.shadow.mapSize.height = 1024;
-    // this.directionalLight.shadow.radius = 4;
-    // this.directionalLight.shadow.bias = - 0.00006;
+    this.directionalLight.position.set(0, 20, 50);
+    // this.directionalLight.castShadow = true;
+    this.directionalLight.shadow.camera.near = 0.01;
+    this.directionalLight.shadow.camera.far = 500;
+    this.directionalLight.shadow.camera.right = 30;
+    this.directionalLight.shadow.camera.left = - 30;
+    this.directionalLight.shadow.camera.top	= 30;
+    this.directionalLight.shadow.camera.bottom = - 30;
+    this.directionalLight.shadow.mapSize.width = 1024;
+    this.directionalLight.shadow.mapSize.height = 1024;
+    this.directionalLight.shadow.radius = 4;
+    this.directionalLight.shadow.bias = - 0.00006;
     this.scene.add(this.directionalLight);
   }
 }
