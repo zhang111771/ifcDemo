@@ -11,6 +11,7 @@ import animate from "./animate";
 import eventHub from "@/utils/eventHub";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import Composer from './composerModule'
+import Colider from './colliderModule'
 import { gsap } from "gsap"
 class AddMesh {
   constructor(animate) {
@@ -24,10 +25,11 @@ class AddMesh {
     //选中物体集合
     this.outlineMeshes = [];
     // this.addHelper()
-    console.log(ControlsModule);
+
     this.camera = animate.cameraModule.activeCamera;
     this.rayCaster = new Raycaster(this.camera);
 
+    this.colider=null
     this.addCity();
     this.addSceneBackground();
     this.addLight();
@@ -226,7 +228,8 @@ class AddMesh {
   addCity() {
     this.actions = [];
     this.gltfLoader.load("./model/floor3.glb", (gltf) => {
-
+      
+     
       gltf.scene.children.map((child) => {
         
         //组需要做特殊处理
@@ -270,8 +273,16 @@ class AddMesh {
           this.outlineMeshes.push(child);
         }
       });
-     
-
+      console.log(this.scene)
+      let group=new THREE.Group()
+      this.outlineMeshes.map((mesh)=>{
+        if(mesh.isMesh){
+          group.add(mesh)
+        }
+      })
+      this.scene.add(group)
+      this.colider=new Colider(group,this.camera)
+      this.animate.addAnimate( this.colider.update.bind(this.colider))
       this.cityAnimations = gltf.animations;
 
       this.mixer = new THREE.AnimationMixer(gltf.scene);

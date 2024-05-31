@@ -24,7 +24,7 @@ class Animate{
             // rendererModule.renderer.render(SceneModule.scene,CameraModule.activeCamera)
         
             this.composerModule.composer.render()
-            ControlsModule.controls.update()
+            // ControlsModule.controls.update()
       
             this.animateCall({elapsedTime,deltaTime})
             requestAnimationFrame(animate)
@@ -33,6 +33,7 @@ class Animate{
       
     }
     animateCall({elapsedTime,deltaTime}){
+
         this.fns.forEach((fn)=>{
             fn({elapsedTime,deltaTime})
         })
